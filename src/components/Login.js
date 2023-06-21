@@ -17,8 +17,8 @@ const localUserData = () => {
     
 }
 
-const Login = () => {
-
+const Login = ({ setUserState }) => {
+    // console.log(setUserState)
     const navigate = useNavigate()
     const location = useLocation()
     const routeToRegister = () => {
@@ -26,17 +26,8 @@ const Login = () => {
     }
 
     const routeToHome = () => {
-        <Navigate to='/home' />
+        navigate('../')
     }
-
-    //const [user, setUser] = useState(localUserData('users'))
-    // const [email, setEmail] = useState('email')
-    // const [password, setPassword] = useState('password')
-
-    // const [input, setInput] = useState({
-    //     email: "",
-    //     password: "",
-    // })
 
     const [users, setUsers] = useState(localUserData()) 
     const [username, setUsername] = useState('');
@@ -64,15 +55,15 @@ const Login = () => {
 
         const users = JSON.parse(localStorage.getItem("usersDB")) || [];
 
-        console.log('user', user)
-        console.log(username, password)
+        let user = users.find(user => username === user.email && password === user.password)
 
-        // if(user && username === user[2].email && password === user[2].password){
-        //     console.log('login succefull')
-        //     routeToHome();
-        // } else {
-        //     console.log('Invalid email or password')
-        // }
+        if(user){
+            console.log('login succefull')
+            setUserState(true)
+            routeToHome();
+        } else {
+            console.log('Invalid email or password')
+        }
 
         setUsername('');
         setPassword('');

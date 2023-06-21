@@ -34,7 +34,7 @@ const Registration = () => {
     console.log(userInfo)
   };
 
-
+  // Saving to local storage
   useEffect(() => {
       localStorage.setItem('usersDB', JSON.stringify(userInfo));
   }, [userInfo])
