@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react'
-//import { NavLink, Navigate } from 'react-router-dom'
-import Home from './Home'
 import { useNavigate, useParams, useLocation, Navigate } from 'react-router-dom'
 
 
@@ -75,7 +73,7 @@ const Login = ({ setUserState }) => {
         <div className="col-1">
                 <h2> Sign In </h2>
                 <span>Please login to access the Todo App</span>
-                <form id="form" className='flex flex-col' onSubmit={handleSubmit}>
+                <form id="form" className='form-login flex flex-col' onSubmit={handleSubmit}>
                     <label htmlFor="InputEmail"> Username </label>
                     <input 
                     name="email"

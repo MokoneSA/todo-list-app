@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react'
-// import { v4 as uuidv4 } from 'uuid'
-// import TodoForm from './TodoForm'
-// import TodoList from './TodoList'
-// import EditTodoForm from './EditTodoForm'
 
 /* importing react icons */
-import {AiTwotoneDelete, AiOutlineEdit} from 'react-icons/ai'
-// import { IoMdAdd } from 'react-icons/io'
+// import { FaSearch } from "react-icons/fa"
+import {AiTwotoneDelete, AiOutlineEdit, AiOutlineSearch} from 'react-icons/ai'
+
 
 const localData = () => {
     let list = localStorage.getItem('todo-list');
@@ -23,7 +20,15 @@ const Home = () => {
     const [listItem, setListItem] = useState(localData());
     const [taskName, setTaskName] = useState("");
     const [taskDescription, setTaskDescription] = useState("");
+    const [searchQuery, setSearchQuery] = useState([]);
+    const [Priority, setPriority] = useState()
 
+
+    // Handles the radio buttons
+    const handleRadioButtons = (e) => {
+        setPriority(e.target.value);
+        console.log(Priority)
+    }
 
 
     // Handles the add task function
@@ -32,115 +37,159 @@ const Home = () => {
 
         let newTask = {
             taskName,
-            taskDescription
+            taskDescription,
+            Priority
         }
 
         setListItem([...listItem, newTask]);
-        setTaskName('')
-        setTaskDescription('')
+        setTaskName('');
+        setTaskDescription('');
+        setPriority('');
+    }
 
-        console.log(newTask)
+
+    // Handles update function
+    const handleUpdate = (e, task) => {
+        e.preventDefault()
+
+        let editedTask = {
+            taskName,
+            taskDescription,
+            Priority
+        }
+
+        setTaskName(taskName)
+        setTaskDescription(taskDescription)
+        setPriority(Priority)
+
+        setListItem(listItem.map(task => {
+           return task.taskName === taskName ? editedTask : task
+        }))
+
+        setTaskName('');
+        setTaskDescription('');
+        setPriority('');
+
+    }
+
+    // Handle the search function
+    const handleSearch = (taskName) => {
+
+        const searchItem = JSON.parse(localStorage.getItem('todo-list'));
+
+        setSearchQuery (
+            searchItem.filter(task => {
+                return task.taskName === taskName
+            })
+        )
+        setSearchQuery()
+
+        console.log(searchItem);
+
         
     }
 
     //Handles the delete function
-    const deleteTodo = () => {
+    const deleteTodo = (taskName) => {
+        console.log(taskName)
+        const newTask = listItem.filter(task => {
+            return task.taskName !== taskName
+        })
 
-        const filteredItem = listItem.filter((value, index) => {
-            console.log(value !== value )
-            console.log(value);
-        });
-
-        setListItem(filteredItem);
-        console.log('Selected item', filteredItem)
-
-        // let firstNames = ["super", "spider", "ant", "iron"]
-        // let male = "man";
-        // let female = "woman";
-
-        // let fullNames = firstNames.map(function(firstName, index) {
-        //     return (index == 0) ? firstName + female : firstName + male;
-        // });
-
-        // console.log(fullNames);
-
+        setListItem(newTask);
+        console.log(newTask)
     }
+
+    // Handles the edit function
+    function handleEdit (task) {
+        setTaskName(task.taskName);
+        setTaskDescription(task.taskDescription);
+        setPriority(task.Priority);
+        
+        console.log(task)
+    } 
 
     // Saving to local storage
     useEffect(() => {
         localStorage.setItem('todo-list', JSON.stringify(listItem));
     }, [listItem])
 
-    
 
-    // Handles the edit function
-    // const editTodo = (id) => {
-    //     setTodos(todos.map(( todo ) => todo.id === id ? { ...todo, isEditing: !todo.isEditing } : todo )
-    //      );
-
-    // }
-
-    // const editTask = (task, id) => {
-    //     const newTaskList = todos.map(( todo ) => todo.id === id ? { ...todo, task, isEditing: !todo.isEditing } : todo )
-    //     setTodos( newTaskList );
-    //     localStorage.setItem('todos')
-    // }
-
-    //
-    // const toggleComplete = (id) => {
-    //     //const newTaskList = [ ...todos, { id: uuidv4(), task: todo, completed: false, isEditing: false }];
-    //     const newTaskList = todos.map(todo => todo.id === id ? { ...todo, completed: !todo.completed} : todo)
-    //     setTodos(newTaskList);
-    //     localStorage.setItem('todos', JSON.stringify(newTaskList));
-    // }
-
-
-    // useEffect(() => {
-    //     const savedTodoList = JSON.parse(localStorage.getItem('todos')) || [];
-    //     setTodos(savedTodoList);
-    // }, []);
 
     return (
     <>
         <div className='todo-app'>
             <div className='todolist-header'>
                 <h1>Todo List App</h1>
-                <form className='todolist-form' onSubmit={addTodo}>
+                <form className='todolist-form'>
                     <div className='form-inputs'>
-                        <input 
-                        type='text'
-                        required
-                        value={taskName} 
-                        onChange={(e) => setTaskName(e.target.value)} 
-                        placeholder='Enter task name'
-                        />
-                        <input 
-                        type='text'
-                        required
-                        value={taskDescription} 
-                        onChange={(e) => setTaskDescription(e.target.value)} 
-                        placeholder='Enter description'
-                        />
+                            <input 
+                            type='text'
+                            required
+                            value={taskName} 
+                            onChange={(e) => setTaskName(e.target.value)} 
+                            placeholder='Enter task name'
+                            />
+                            <input 
+                            type='text'
+                            required
+                            value={taskDescription} 
+                            onChange={(e) => setTaskDescription(e.target.value)} 
+                            placeholder='Enter description'
+                            />
+                            <div className='form-radio'>
+                            <input 
+                                className='radio-btn1' 
+                                type='radio' 
+                                name='priority' 
+                                value='low'
+                               
+                                onChange={handleRadioButtons} 
+                            /> <span className='radio-btn1'> Low </span>
+                            <input 
+                                className='radio-btn2' 
+                                type='radio' 
+                                name='priority' 
+                                value='medium'
+                                
+                                onChange={handleRadioButtons} 
+                            /> <span className='radio-btn2'> Medium </span>
+                            <input 
+                                className='radio-btn3' 
+                                type='radio' 
+                                name='priority' 
+                                value='high'
+                                
+                                onChange={handleRadioButtons}
+                            /> <span className='radio-btn3'> High </span>
+                            </div>
                     </div>
-                    <div className='form-check'>
-                            <input type='radio' name='priority' value='low' /> Low
-                            <input type='radio' name='priority' value='medium'/>Medium
-                            <input type='radio' name='priority' value='high'/>High
-                    </div>
-                    <button className='btn-add'>ADD</button>
+                        <button className='btn-add' onClick={addTodo}>ADD</button> 
+                        <button className='btn-update' onClick={(e) => handleUpdate(e, taskName)}> UPDATE</button>
                 </form>
             </div>
             <div className='todolist-display'>
+                <div className='search-section'>
+                    <input type='text' placeholder='Search' />
+                    <span><AiOutlineSearch className="searcn-btn" onClick={() => handleSearch(taskName)} /></span>
+                </div>
                 {
-                    listItem.map((task, index) => (
-                        <div className='display-list' key={index}>
+                    listItem.map((task, index) => ( 
+                        <div className={`display-list ${task.Priority}`} key={index}>
                             <div className='task-details'>
                                 <h3 className='task-heading'>{task.taskName}</h3>
                                 <p className='task-description'>{task.taskDescription}</p>
                             </div>
                             <div>
-                                <AiOutlineEdit className='edit-btn' />
-                                <AiTwotoneDelete className='delete-btn' onClick={deleteTodo} />
+                                <AiOutlineEdit 
+                                    className='edit-btn' 
+                                    onClick={() => handleEdit(task, index) } 
+                                />
+
+                                <AiTwotoneDelete 
+                                    className='delete-btn' 
+                                    onClick={() => deleteTodo(task.taskName)} 
+                                />
                             </div>
                         </div>
                     ))

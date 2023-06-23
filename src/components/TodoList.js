@@ -1,6 +1,6 @@
 import React from 'react'
 
-const TodoList = (task,toggleComplete, deleteTodo, editTodo, todo) => {
+const TodoList = ({  deleteTodo, handleEdit }) => {
 
   return (
         <div className='todo'>
@@ -12,7 +12,7 @@ const TodoList = (task,toggleComplete, deleteTodo, editTodo, todo) => {
                 {todo.map((t) => (
                   <li>
                     <span key={todo.id} onClick={() => toggleComplete(task.id)}>{task.todo}</span>
-                    <button onClick={() => editTodo(todo.id)}>Edit</button>
+                    <button onClick={() => handleEdit(handleEdit)}>Edit</button>
                     <button onClick={() => deleteTodo(todo.id)}>Delete</button>
                   </li>
                 ))}

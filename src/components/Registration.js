@@ -45,7 +45,7 @@ const Registration = () => {
       <div className="col-1">
           <h2> Sign Up </h2>
             <span> Register your details below: </span>
-            <form id="form" className='flex flex-col' onSubmit={handleSubmit}>
+            <form id="form" className='form-register flex flex-col' onSubmit={handleSubmit}>
             <label htmlFor="InputName"> Name </label>
               <input name="name" value={name} type="text" placeholder="name" onChange={(e) => setName(e.target.value)}/>
               <label htmlFor="InputEmail"> Email </label>
