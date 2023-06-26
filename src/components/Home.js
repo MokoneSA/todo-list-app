@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
-
-/* importing react icons */
-// import { FaSearch } from "react-icons/fa"
-import {AiTwotoneDelete, AiOutlineEdit, AiOutlineSearch} from 'react-icons/ai'
+import Search from './Search'
+import ListItems from './ListItems'
 
 
 const localData = () => {
@@ -21,13 +19,14 @@ const Home = () => {
     const [taskName, setTaskName] = useState("");
     const [taskDescription, setTaskDescription] = useState("");
     const [searchQuery, setSearchQuery] = useState([]);
-    const [Priority, setPriority] = useState()
+    const [priority, setPriority] = useState()
+    const [isSearching, setIsSearching] = useState(false);
 
 
     // Handles the radio buttons
     const handleRadioButtons = (e) => {
         setPriority(e.target.value);
-        console.log(Priority)
+        console.log(priority)
     }
 
 
@@ -38,7 +37,7 @@ const Home = () => {
         let newTask = {
             taskName,
             taskDescription,
-            Priority
+            priority
         }
 
         setListItem([...listItem, newTask]);
@@ -55,12 +54,12 @@ const Home = () => {
         let editedTask = {
             taskName,
             taskDescription,
-            Priority
+            priority
         }
 
         setTaskName(taskName)
         setTaskDescription(taskDescription)
-        setPriority(Priority)
+        setPriority(priority)
 
         setListItem(listItem.map(task => {
            return task.taskName === taskName ? editedTask : task
@@ -74,20 +73,16 @@ const Home = () => {
 
     // Handle the search function
     const handleSearch = (taskName) => {
-
-        const searchItem = JSON.parse(localStorage.getItem('todo-list'));
+        const searchData = JSON.parse(localStorage.getItem('todo-list'));
 
         setSearchQuery (
-            searchItem.filter(task => {
-                return task.taskName === taskName
-            })
+        searchData.filter(index => {
+            return index.taskName === taskName
+        })
         )
-        setSearchQuery()
-
-        console.log(searchItem);
-
-        
-    }
+        setIsSearching(true);
+        console.log(searchQuery)
+    };
 
     //Handles the delete function
     const deleteTodo = (taskName) => {
@@ -169,30 +164,11 @@ const Home = () => {
                 </form>
             </div>
             <div className='todolist-display'>
-                <div className='search-section'>
-                    <input type='text' placeholder='Search' />
-                    <span><AiOutlineSearch className="searcn-btn" onClick={() => handleSearch(taskName)} /></span>
-                </div>
-                {
-                    listItem.map((task, index) => ( 
-                        <div className={`display-list ${task.Priority}`} key={index}>
-                            <div className='task-details'>
-                                <h3 className='task-heading'>{task.taskName}</h3>
-                                <p className='task-description'>{task.taskDescription}</p>
-                            </div>
-                            <div>
-                                <AiOutlineEdit 
-                                    className='edit-btn' 
-                                    onClick={() => handleEdit(task, index) } 
-                                />
-
-                                <AiTwotoneDelete 
-                                    className='delete-btn' 
-                                    onClick={() => deleteTodo(task.taskName)} 
-                                />
-                            </div>
-                        </div>
-                    ))
+                < Search onSearch={handleSearch} />
+                {searchQuery.length ? 
+                   <ListItems handleEdit={handleEdit} deleteTodo={deleteTodo} listItem={searchQuery}/>
+                   :
+                   <ListItems handleEdit={handleEdit} deleteTodo={deleteTodo} listItem={listItem}/>
                 }
             </div>
         </div>
