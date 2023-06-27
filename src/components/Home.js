@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Search from './Search'
 import ListItems from './ListItems'
+import { BiLogOut } from 'react-icons/bi'
+import { useNavigate } from 'react-router-dom'
 
 
 const localData = () => {
@@ -18,15 +20,21 @@ const Home = () => {
     const [listItem, setListItem] = useState(localData());
     const [taskName, setTaskName] = useState("");
     const [taskDescription, setTaskDescription] = useState("");
-    const [searchQuery, setSearchQuery] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
     const [priority, setPriority] = useState()
     const [isSearching, setIsSearching] = useState(false);
+
+    // Handles the logout
+    const navigate = useNavigate();
+    const routeToLogin = () => {
+    navigate('login')
+    };
 
 
     // Handles the radio buttons
     const handleRadioButtons = (e) => {
         setPriority(e.target.value);
-        console.log(priority)
+        console.log(e.target.value)
     }
 
 
@@ -48,7 +56,7 @@ const Home = () => {
 
 
     // Handles update function
-    const handleUpdate = (e, task) => {
+    const handleUpdate = (e) => {
         e.preventDefault()
 
         let editedTask = {
@@ -102,7 +110,7 @@ const Home = () => {
         setPriority(task.Priority);
         
         console.log(task)
-    } 
+    }
 
     // Saving to local storage
     useEffect(() => {
@@ -166,10 +174,13 @@ const Home = () => {
             <div className='todolist-display'>
                 < Search onSearch={handleSearch} />
                 {searchQuery.length ? 
-                   <ListItems handleEdit={handleEdit} deleteTodo={deleteTodo} listItem={searchQuery}/>
+                   <ListItems handleEdit={handleEdit} deleteTodo={deleteTodo} listItem={searchQuery} priority={priority}/>
                    :
-                   <ListItems handleEdit={handleEdit} deleteTodo={deleteTodo} listItem={listItem}/>
+                   <ListItems handleEdit={handleEdit} deleteTodo={deleteTodo} listItem={listItem} priority={priority}/>
                 }
+            </div>
+            <div className='logout'>
+                <button className='logout-btn' onClick={() => routeToLogin()}>LOG OUT </button><BiLogOut className='logout-icon' />
             </div>
         </div>
     </>

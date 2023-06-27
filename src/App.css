@@ -191,14 +191,6 @@ h1 {
   background-color: #003049;
 }
 
-/* .add-icon {
-  color: white;
-  font-size: 30px;
-  margin-left: 5px;
-  border-radius: 15px;
-  background-color: #003049;
-} */
-
 /* Display List */
 .todolist-header {
   display: flex;
@@ -283,4 +275,26 @@ h1 {
 .searcn-btn {
   font-size: 22px;
   margin: 10px 0 0 -40px;
+}
+
+/* Styling the logout button */
+.logout {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.logout-btn {
+  background-color: white;
+  font-size: 20PX;
+  border: none;
+  cursor: pointer;
+}
+
+.logout-icon {
+  background-color: white;
+  font-size: 25px;
+  border-left: none;
 }
